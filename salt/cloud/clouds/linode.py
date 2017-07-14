@@ -177,8 +177,17 @@ def avail_sizes(call=None):
         raise SaltCloudException(
             'The avail_locations function must be called with -f or --function.'
         )
-
-    response = _query('avail', 'LinodePlans')
+        
+    try:
+        response = _query('avail', 'LinodePlans')
+    except Exception as err:
+        log.error(
+            'Error retrieving available Linode sizes.\n\n'
+            'The following exception was thrown by Linode:\n\n'
+            '{}'.format(err),
+            exc_info_on_loglevel=logging.DEBUG
+        )
+        return False
 
     ret = {}
     for item in response['DATA']:
