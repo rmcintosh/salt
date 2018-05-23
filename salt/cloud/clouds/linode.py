@@ -1051,6 +1051,8 @@ def get_plan_id(kwargs=None, call=None):
                     'Invalid Linode plan ({}) specified - call avail_sizes() for all available options'.format(new_label)
                 )
 
+            label = new_label
+
     return sizes[label]['PLANID']
 
 
