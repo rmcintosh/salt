@@ -1289,19 +1289,20 @@ def ip_addrs(interface=None, include_loopback=False, cidr=None, type=None):
     )
     if cidr:
         return [i for i in addrs if __utils__["network.in_subnet"](cidr, [i])]
-    else:
-        if type == "public":
-            return [i for i in addrs if not is_private(i)]
-        elif type == "private":
-            return [i for i in addrs if is_private(i)]
-        else:
-            return addrs
+
+    if type == "public":
+        return [i for i in addrs if not is_private(i)]
+
+    if type == "private":
+        return [i for i in addrs if is_private(i)]
+
+    return addrs
 
 
 ipaddrs = salt.utils.functools.alias_function(ip_addrs, "ipaddrs")
 
 
-def ip_addrs6(interface=None, include_loopback=False, cidr=None):
+def ip_addrs6(interface=None, include_loopback=False, cidr=None, type=None):
     """
     Returns a list of IPv6 addresses assigned to the host. ::1 is ignored,
     unless 'include_loopback=True' is indicated. If 'interface' is provided,
@@ -1322,10 +1323,17 @@ def ip_addrs6(interface=None, include_loopback=False, cidr=None):
     addrs = __utils__["network.ip_addrs6"](
         interface=interface, include_loopback=include_loopback
     )
+
     if cidr:
         return [i for i in addrs if __utils__["network.in_subnet"](cidr, [i])]
-    else:
-        return addrs
+
+    if type == "public":
+        return [i for i in addrs if not is_private(i)]
+
+    if type == "private":
+        return [i for i in addrs if is_private(i)]
+
+    return addrs
 
 
 ipaddrs6 = salt.utils.functools.alias_function(ip_addrs6, "ipaddrs6")
